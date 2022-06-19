@@ -31,10 +31,11 @@ from keras.optimizers import Adam
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
+
 np.random.seed(1337)  # for reproducibility
 # parameters
 nb_epoch = 100  # number of epoch at training stage. To find a nice epochs in the valid dataset.
-batch_size = 64 # batch size
+batch_size = 64  # batch size
 lr = 0.001  # learning rate lr = 0.0002
 # divide data into two subsets: Train & Test, of which the test set is the last "days_test" days
 days_test = 3
@@ -69,13 +70,16 @@ class MinMaxNormalization(object):
         X = (X + 1.) / 2.
         X = 1. * X * (self._max - self._min) + self._min
         return X
+
+
 def creat_dataset(dataset, tw):
     data_x = []
     data_y = []
-    for i in range(len(dataset)-tw):
-        data_x.append(dataset[i:i+tw])
-        data_y.append(dataset[i+tw])
+    for i in range(len(dataset) - tw):
+        data_x.append(dataset[i:i + tw])
+        data_y.append(dataset[i + tw])
     return np.asarray(data_x), np.asarray(data_y)  # 转为ndarray数据
+
 
 def main():
     # load data
@@ -98,7 +102,6 @@ def main():
     x_data_test = dataset[-len_test:]
     x_train, y_train = creat_dataset(x_data_train, tw)
     x_test, y_test = creat_dataset(x_data_test, tw)
-
 
     model = Sequential()
     model.add(GRU(input_dim=1, output_dim=50, return_sequences=True))
@@ -144,5 +147,7 @@ def main():
     plt.grid(True)
     plt.savefig('kk.png')
     plt.show()
+
+
 if __name__ == '__main__':
     main()
